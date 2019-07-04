@@ -16,6 +16,9 @@ def get_job_state(job_key):
         return response
 
     job = Job.fetch(job_key, connection=conn)
+    
+    response["content"].update(args=job.args)
+    response["content"].update(kwargs=job.kwargs)
 
     if job.is_finished:
         response["message"] = JobMessage.FINISHED
@@ -25,7 +28,6 @@ def get_job_state(job_key):
     elif job.is_failed:
         response["message"] = JobMessage.FAILED
         response["job_state"] = JobState.FAILED
-        response["content"].update(args=job.args)
         response["traceback"].update(traceback=job.exc_info)
 
     elif job.is_queued:

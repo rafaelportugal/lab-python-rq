@@ -15,7 +15,7 @@ q = Queue(queue_name, connection=conn)
 
 
 def call_job(func, *args, **kwargs):
-    job = q.enqueue_call(func=func, args=args, **kwargs)
+    job = q.enqueue_call(func=func, args=args, kwargs=kwargs)
     parse_args = []
     for k in args:
         if k.__class__ in (datetime, date):
@@ -23,7 +23,7 @@ def call_job(func, *args, **kwargs):
         else:
             parse_args.append(k)
     job_id = job.get_id()
-    response = {
+    metadados = {
         "message": "Job added in queue",
         "job_id": job.get_id(),
         "func_name": func.__name__,
@@ -31,6 +31,6 @@ def call_job(func, *args, **kwargs):
         "kwargs": kwargs,
     }
 
-    logger.info(f"Job added in queue. job_id => '{job_id}'", response=response)
+    logger.info(f"Job added in queue. metadados => {metadados}")
 
-    return response
+    return job_id

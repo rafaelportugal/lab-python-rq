@@ -20,11 +20,9 @@ class JobStatus(restful.Resource):
             }
         }
 
-        response.update(context=result.get("context"))
+        response.update(content=result.get("content"))
 
         if job_status == JobState.NOT_FOUND:
             status_code = 404
-        elif job_status in (JobState.WAITING, JobState.RUNNING):
-            status_code = 202
 
         return response, status_code
